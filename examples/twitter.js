@@ -1,4 +1,4 @@
-const oauth1 = require('./').oauth1({
+const oauth1 = require('../').oauth1({
   resourceUri: 'https://api.twitter.com/1.1/account/verify_credentials.json?skip_status=true&include_entities=false&include_email=true'
 })(
   'https://api.twitter.com/oauth/request_token',

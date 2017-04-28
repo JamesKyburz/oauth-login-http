@@ -1,4 +1,4 @@
-const oauth2 = require('./').oauth2({
+const oauth2 = require('../').oauth2({
   resourceUri: 'https://api.github.com/user',
   callbackUri: 'http://localhost:3000/callback',
   scope: 'user'

@@ -1,4 +1,4 @@
-const oauth2 = require('./').oauth2({
+const oauth2 = require('../').oauth2({
   resourceUri: 'https://www.googleapis.com/oauth2/v3/userinfo?grant_type=profile',
   callbackUri: 'http://localhost:3000/callback',
   scope: 'profile email'
