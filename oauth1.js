@@ -1,4 +1,5 @@
 const { OAuth } = require('oauth')
+const OAuthError = require('node-oauth-error')
 const url = require('url')
 
 module.exports = oauth1
@@ -26,25 +27,26 @@ function wrap (options) {
 
   function callback (oa) {
     return (requestUri, cb) => {
+      const returnError = (err) => cb(new OAuthError(err))
       const urlParts = url.parse(requestUri, true)
       getRequestToken(oa, (err, token, secret, result) => {
-        if (err) return cb(err)
+        if (err) returnError(err)
         oa.getOAuthAccessToken(
           urlParts.query.oauth_token,
           secret,
           urlParts.query.oauth_verifier,
           (err, token, secret, result) => {
-            if (err) return cb(err)
+            if (err) returnError(err)
             oa.get(
               options.resourceUri,
               token,
               secret,
               (err, data) => {
-                if (err) return cb(err)
+                if (err) returnError(err)
                 try {
                   cb(null, JSON.parse(data))
-                } catch (e) {
-                  cb(e)
+                } catch (err) {
+                  returnError(err)
                 }
               }
             )
