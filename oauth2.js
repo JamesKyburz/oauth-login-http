@@ -50,7 +50,7 @@ function wrap (options) {
               if (err) returnError(err)
               try {
                 cb(null, JSON.parse(data))
-              } catch (e) {
+              } catch (err) {
                 returnError(err)
               }
             }
