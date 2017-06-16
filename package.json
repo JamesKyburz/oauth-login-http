@@ -21,7 +21,7 @@
     "missing": "dependency-sync --once"
   },
   "devDependencies": {
-    "dependency-sync": "2.0.23"
+    "dependency-sync": "2.1.0"
   },
   "dependency-sync": {
     "args": [
