@@ -22,7 +22,7 @@ function wrap (options) {
 
   function auth (oa) {
     return (cb) => {
-      const returnError = (err) => cb(new OAuthError(err))
+      const oauthError = (err) => cb(new OAuthError(err))
       try {
         const authUrl = oa.getAuthorizeUrl({
           redirect_uri: options.callbackUri,
@@ -31,7 +31,7 @@ function wrap (options) {
         })
         cb(null, authUrl)
       } catch (err) {
-        returnError(err)
+        oauthError(err)
       }
     }
   }
@@ -39,19 +39,19 @@ function wrap (options) {
   function callback (oa) {
     return (requestUri, cb) => {
       const urlParts = url.parse(requestUri, true)
-      const returnError = (err) => cb(new OAuthError(err))
+      const oauthError = (err) => cb(new OAuthError(err))
       oa.getOAuthAccessToken(urlParts.query.code, { redirect_uri: options.callbackUri, grant_type: options.grantType },
         (err, token) => {
-          if (err) returnError(err)
+          if (err) return oauthError(err)
           oa.getProtectedResource(
             options.resourceUri,
             token,
             (err, data) => {
-              if (err) returnError(err)
+              if (err) return oauthError(err)
               try {
                 cb(null, JSON.parse(data))
               } catch (err) {
-                returnError(err)
+                oauthError(err)
               }
             }
           )

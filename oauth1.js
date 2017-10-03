@@ -27,26 +27,26 @@ function wrap (options) {
 
   function callback (oa) {
     return (requestUri, cb) => {
-      const returnError = (err) => cb(new OAuthError(err))
+      const oauthError = (err) => cb(new OAuthError(err))
       const urlParts = url.parse(requestUri, true)
       getRequestToken(oa, (err, token, secret, result) => {
-        if (err) returnError(err)
+        if (err) return oauthError(err)
         oa.getOAuthAccessToken(
           urlParts.query.oauth_token,
           secret,
           urlParts.query.oauth_verifier,
           (err, token, secret, result) => {
-            if (err) returnError(err)
+            if (err) return oauthError(err)
             oa.get(
               options.resourceUri,
               token,
               secret,
               (err, data) => {
-                if (err) returnError(err)
+                if (err) return oauthError(err)
                 try {
                   cb(null, JSON.parse(data))
                 } catch (err) {
-                  returnError(err)
+                  oauthError(err)
                 }
               }
             )
