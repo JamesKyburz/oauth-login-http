@@ -5,8 +5,6 @@ const url = require('url')
 module.exports = oauth1
 
 function oauth1 (options = {}) {
-  if (!options.resourceUri) throw new Error('missing options.resourceUri')
-
   return wrap(options)
 }
 
@@ -14,7 +12,10 @@ function wrap (options) {
   return function () {
     const oa = new OAuth(...arguments)
 
-    return { auth: auth(oa), callback: callback(oa) }
+    return {
+      auth: auth(oa),
+      callback: callback(oa)
+     }
   }
 
   function getRequestToken (oa, cb) {
@@ -37,19 +38,24 @@ function wrap (options) {
           urlParts.query.oauth_verifier,
           (err, token, secret, result) => {
             if (err) return oauthError(err)
-            oa.get(
-              options.resourceUri,
-              token,
-              secret,
-              (err, data) => {
-                if (err) return oauthError(err)
-                try {
-                  cb(null, JSON.parse(data))
-                } catch (err) {
-                  oauthError(err)
+
+            if (options.resourceUri) {
+              oa.get(
+                options.resourceUri,
+                token,
+                secret,
+                (err, data) => {
+                  if (err) return oauthError(err)
+                  try {
+                    cb(null, JSON.parse(data))
+                  } catch (err) {
+                    oauthError(err)
+                  }
                 }
-              }
-            )
+              )
+            } else {
+              cb(null, {token, secret})
+            }
           }
         )
       })
