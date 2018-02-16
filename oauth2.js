@@ -5,7 +5,6 @@ const url = require('url')
 module.exports = oauth2
 
 function oauth2 (options = {}) {
-  if (!options.resourceUri) throw new Error('missing options.resourceUri')
   if (!options.callbackUri) throw new Error('missing options.callbackUri')
   options.scope = options.scope || ''
   options.responseType = options.responseType || 'code'
@@ -43,18 +42,22 @@ function wrap (options) {
       oa.getOAuthAccessToken(urlParts.query.code, { redirect_uri: options.callbackUri, grant_type: options.grantType },
         (err, token) => {
           if (err) return oauthError(err)
-          oa.getProtectedResource(
-            options.resourceUri,
-            token,
-            (err, data) => {
-              if (err) return oauthError(err)
-              try {
-                cb(null, JSON.parse(data))
-              } catch (err) {
-                oauthError(err)
+          if (options.resourceUri) {
+            oa.getProtectedResource(
+              options.resourceUri,
+              token,
+              (err, data) => {
+                if (err) return oauthError(err)
+                try {
+                  cb(null, JSON.parse(data))
+                } catch (err) {
+                  oauthError(err)
+                }
               }
-            }
-          )
+            )
+          } else {
+            cb(null, {token})
+          }
         }
       )
     }
