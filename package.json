@@ -10,12 +10,10 @@
     "name": "James Kyburz",
     "email": "james.kyburz@gmail.com"
   },
-  "main": "index.js",
+  "main": "src/index.js",
   "version": "1.0.6",
   "files": [
-    "index.js",
-    "oauth1.js",
-    "oauth2.js"
+    "src"
   ],
   "scripts": {
     "missing": "dependency-sync --once"
@@ -25,9 +23,7 @@
   },
   "dependency-sync": {
     "args": [
-      "index.js",
-      "oauth1.js",
-      "oauth2.js",
+      "src/index.js",
       "--debug"
     ]
   },
