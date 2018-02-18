@@ -23,12 +23,12 @@ function wrap (options) {
   }
 
   function auth (oa) {
-    return (cb) => getRequestToken(oa, cb)
+    return cb => getRequestToken(oa, cb)
   }
 
   function callback (oa) {
     return (requestUri, cb) => {
-      const oauthError = (err) => cb(new OAuthError(err))
+      const oauthError = err => cb(new OAuthError(err))
       const urlParts = url.parse(requestUri, true)
       getRequestToken(oa, (err, token, secret, result) => {
         if (err) return oauthError(err)
@@ -40,21 +40,16 @@ function wrap (options) {
             if (err) return oauthError(err)
 
             if (options.resourceUri) {
-              oa.get(
-                options.resourceUri,
-                token,
-                secret,
-                (err, data) => {
-                  if (err) return oauthError(err)
-                  try {
-                    cb(null, JSON.parse(data))
-                  } catch (err) {
-                    oauthError(err)
-                  }
+              oa.get(options.resourceUri, token, secret, (err, data) => {
+                if (err) return oauthError(err)
+                try {
+                  cb(null, JSON.parse(data))
+                } catch (err) {
+                  oauthError(err)
                 }
-              )
+              })
             } else {
-              cb(null, {token, secret})
+              cb(null, { token, secret })
             }
           }
         )
