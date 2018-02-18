@@ -16,10 +16,7 @@
     "src"
   ],
   "scripts": {
-    "missing": "dependency-sync --once"
-  },
-  "devDependencies": {
-    "dependency-sync": "2.1.0"
+    "missing": "npx dependency-sync --once"
   },
   "dependency-sync": {
     "args": [
