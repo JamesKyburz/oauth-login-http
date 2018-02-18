@@ -15,7 +15,7 @@ function wrap (options) {
     return {
       auth: auth(oa),
       callback: callback(oa)
-     }
+    }
   }
 
   function getRequestToken (oa, cb) {
