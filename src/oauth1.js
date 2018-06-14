@@ -1,5 +1,5 @@
 const { OAuth } = require('oauth')
-const OAuthError = require('node-oauth-error')
+const parseOAuthError = require('./parse-oauth-error')
 const url = require('url')
 
 module.exports = oauth1
@@ -28,7 +28,7 @@ function wrap (options) {
 
   function callback (oa) {
     return (requestUri, cb) => {
-      const oauthError = err => cb(new OAuthError(err))
+      const oauthError = err => cb(parseOAuthError(err))
       const urlParts = url.parse(requestUri, true)
       getRequestToken(oa, (err, token, secret, result) => {
         if (err) return oauthError(err)

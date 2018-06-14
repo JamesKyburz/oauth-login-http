@@ -1,5 +1,5 @@
 const { OAuth2 } = require('oauth')
-const OAuthError = require('node-oauth-error')
+const parseOAuthError = require('./parse-oauth-error')
 const url = require('url')
 
 module.exports = oauth2
@@ -21,7 +21,7 @@ function wrap (options) {
 
   function auth (oa) {
     return cb => {
-      const oauthError = err => cb(new OAuthError(err))
+      const oauthError = err => cb(parseOAuthError(err))
       try {
         const authUrl = oa.getAuthorizeUrl({
           redirect_uri: options.callbackUri,
@@ -38,7 +38,7 @@ function wrap (options) {
   function callback (oa) {
     return (requestUri, cb) => {
       const urlParts = url.parse(requestUri, true)
-      const oauthError = err => cb(new OAuthError(err))
+      const oauthError = err => cb(oauthError(err))
       oa.getOAuthAccessToken(
         urlParts.query.code,
         { redirect_uri: options.callbackUri, grant_type: options.grantType },
