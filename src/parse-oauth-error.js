@@ -13,8 +13,8 @@ function json (error) {
 function message (error) {
   try {
     if (typeof error.data === 'string') return error.data
-    if (error.data.error) {
-      return error.data.error
+    if (error.data.error && error.data.error.message) {
+      return error.data.error.message
     }
     if (error.data.errors) {
       if (Array.isArray(error.data.errors) && error.data.errors[0].message) {
