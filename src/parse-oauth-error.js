@@ -4,7 +4,7 @@ function json (error) {
   if (!error || !error.data) return {}
   if (typeof error.data === 'string') {
     try {
-      return JSON.parse(error.data)
+      error.data = JSON.parse(error.data)
     } catch (e) {}
   }
   return { data: error.data }
