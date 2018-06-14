@@ -38,7 +38,7 @@ function wrap (options) {
   function callback (oa) {
     return (requestUri, cb) => {
       const urlParts = url.parse(requestUri, true)
-      const oauthError = err => cb(oauthError(err))
+      const oauthError = err => cb(parseOAuthError(err))
       oa.getOAuthAccessToken(
         urlParts.query.code,
         { redirect_uri: options.callbackUri, grant_type: options.grantType },
